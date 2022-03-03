@@ -13,9 +13,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * Created by astirtrotter on 3/2/22
  */
 class MainViewModel: ViewModel() {
-    val liveData = MutableLiveData<ArrayList<Joke>>()
+    val displayData = MutableLiveData<List<Joke>>()
     private val jokes = arrayListOf<Joke>()
     private val compositeDisposable = CompositeDisposable()
+    private var filter = ""
 
     fun add() {
         compositeDisposable.add(JokeRepository.getJoke()
@@ -24,7 +25,7 @@ class MainViewModel: ViewModel() {
             .subscribeWith(object: DisposableSingleObserver<Joke>() {
                 override fun onSuccess(joke: Joke) {
                     jokes.add(joke)
-                    liveData.postValue(jokes)
+                    search()
                 }
 
                 override fun onError(e: Throwable) {
@@ -32,6 +33,15 @@ class MainViewModel: ViewModel() {
                 }
             })
         )
+    }
+
+    fun search(filter: String = this.filter) {
+        this.filter = filter
+        if (filter.isEmpty()) {
+            displayData.postValue(jokes)
+        } else {
+            displayData.postValue(jokes.filter { it.joke.contains(filter) })
+        }
     }
 
     override fun onCleared() {
