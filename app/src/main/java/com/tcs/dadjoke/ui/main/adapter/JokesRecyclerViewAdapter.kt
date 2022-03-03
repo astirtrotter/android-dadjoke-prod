@@ -1,6 +1,7 @@
 package com.tcs.dadjoke.ui.main.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,13 @@ class JokesRecyclerViewAdapter(
         fun bind(joke: Joke) {
             val binding = ItemJokeBinding.bind(itemView)
             binding.txtValue.text = joke.joke
+            if (joke.isNew) {
+                Log.d("Joke", "Not-already-existing")
+                binding.txtValue.alpha = 1.0f
+            } else {
+                Log.d("Joke", "Already-existing")
+                binding.txtValue.alpha = 0.5f
+            }
         }
     }
 

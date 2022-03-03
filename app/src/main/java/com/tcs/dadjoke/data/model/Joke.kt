@@ -11,6 +11,7 @@ data class Joke(
     @PrimaryKey(autoGenerate = false)
     val id: String,
     val joke: String,
-    val status: Int
+    val status: Int,
+    val isNew: Boolean
 )
 

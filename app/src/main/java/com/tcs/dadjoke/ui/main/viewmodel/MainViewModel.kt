@@ -2,6 +2,7 @@ package com.tcs.dadjoke.ui.main.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.tcs.dadjoke.data.model.Joke
 import com.tcs.dadjoke.data.repository.JokeRepository
 import com.tcs.dadjoke.data.room.JokeDB
@@ -9,6 +10,10 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Created by astirtrotter on 3/2/22
@@ -50,8 +55,10 @@ class MainViewModel: ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object: DisposableSingleObserver<Joke>() {
                 override fun onSuccess(joke: Joke) {
-                    jokes.add(joke)
-                    JokeDB.instance.jokeDao().insert(joke)
+                    jokes.add(joke.copy(isNew = true))
+                    viewModelScope.launch(Dispatchers.IO) {
+                        JokeDB.instance.jokeDao().insert(joke)
+                    }
                     search()
                 }
 
