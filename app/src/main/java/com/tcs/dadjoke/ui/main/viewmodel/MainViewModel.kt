@@ -56,9 +56,6 @@ class MainViewModel: ViewModel() {
             .subscribeWith(object: DisposableSingleObserver<Joke>() {
                 override fun onSuccess(joke: Joke) {
                     jokes.add(joke.copy(isNew = true))
-                    viewModelScope.launch(Dispatchers.IO) {
-                        JokeDB.instance.jokeDao().insert(joke)
-                    }
                     search()
                 }
 
@@ -68,6 +65,12 @@ class MainViewModel: ViewModel() {
                 }
             })
         )
+    }
+
+    fun save(joke: Joke) {
+        viewModelScope.launch(Dispatchers.IO) {
+            JokeDB.instance.jokeDao().insert(joke.apply { isNew = false })
+        }
     }
 
     fun search(filter: String = this.filter) {

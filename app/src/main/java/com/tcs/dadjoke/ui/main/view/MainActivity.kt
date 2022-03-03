@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observeData() {
         viewModel.displayData.observe(this) { jokes ->
-            binding.rvJokes.adapter = JokesRecyclerViewAdapter(jokes, this)
+            binding.rvJokes.adapter = JokesRecyclerViewAdapter(this, viewModel, jokes)
         }
         viewModel.loadingStatusData.observe(this) { loading ->
             if (loading) {

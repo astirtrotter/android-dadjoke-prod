@@ -8,25 +8,33 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.tcs.dadjoke.data.model.Joke
 import com.tcs.dadjoke.databinding.ItemJokeBinding
+import com.tcs.dadjoke.ui.main.viewmodel.MainViewModel
+import okhttp3.internal.notify
 
 /**
  * Created by astirtrotter on 3/2/22
  */
 class JokesRecyclerViewAdapter(
+    private val context: Context,
+    private val viewModel: MainViewModel,
     private val jokes: List<Joke>,
-    private val context: Context
 ): RecyclerView.Adapter<JokesRecyclerViewAdapter.JokeViewHolder>() {
 
     inner class JokeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(joke: Joke) {
+        fun bind(joke: Joke, position: Int) {
             val binding = ItemJokeBinding.bind(itemView)
             binding.txtValue.text = joke.joke
             if (joke.isNew) {
-                Log.d("Joke", "Not-already-existing")
                 binding.txtValue.alpha = 1.0f
+                binding.btnSave.isEnabled = true
             } else {
-                Log.d("Joke", "Already-existing")
                 binding.txtValue.alpha = 0.5f
+                binding.btnSave.isEnabled = false
+            }
+            binding.chkLike.isChecked = joke.isLiked
+            binding.btnSave.setOnClickListener {
+                viewModel.save(joke)
+                notifyItemChanged(position)
             }
         }
     }
@@ -36,7 +44,7 @@ class JokesRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: JokeViewHolder, position: Int) {
-        holder.bind(jokes[position])
+        holder.bind(jokes[position], position)
     }
 
     override fun getItemCount(): Int {

@@ -12,6 +12,7 @@ data class Joke(
     val id: String,
     val joke: String,
     val status: Int,
-    val isNew: Boolean
+    var isNew: Boolean,
+    val isLiked: Boolean
 )
 
