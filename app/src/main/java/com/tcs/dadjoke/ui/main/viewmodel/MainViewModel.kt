@@ -14,11 +14,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  */
 class MainViewModel: ViewModel() {
     val displayData = MutableLiveData<List<Joke>>()
+    val loadingStatusData = MutableLiveData(false)
     private val jokes = arrayListOf<Joke>()
     private val compositeDisposable = CompositeDisposable()
     private var filter = ""
 
     fun add() {
+        loadingStatusData.postValue(true)
         compositeDisposable.add(JokeRepository.getJoke()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -30,18 +32,21 @@ class MainViewModel: ViewModel() {
 
                 override fun onError(e: Throwable) {
                     e.printStackTrace()
+                    loadingStatusData.postValue(false)
                 }
             })
         )
     }
 
     fun search(filter: String = this.filter) {
+        loadingStatusData.postValue(true)
         this.filter = filter
         if (filter.isEmpty()) {
             displayData.postValue(jokes)
         } else {
             displayData.postValue(jokes.filter { it.joke.contains(filter) })
         }
+        loadingStatusData.postValue(false)
     }
 
     override fun onCleared() {

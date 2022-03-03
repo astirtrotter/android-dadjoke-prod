@@ -51,5 +51,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.displayData.observe(this) { jokes ->
             binding.rvJokes.adapter = JokesRecyclerViewAdapter(jokes, this)
         }
+        viewModel.loadingStatusData.observe(this) { loading ->
+            if (loading) {
+                binding.spinner.show()
+            } else {
+                binding.spinner.hide()
+            }
+        }
     }
 }
