@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DadJoke</string>
+    <string name="btn_title_new">New</string>
+    <string name="btn_title_search">Search</string>
+</resources>
