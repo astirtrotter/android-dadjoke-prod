@@ -4,20 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
     tools:context=".ui.main.view.MainActivity">
-
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/spinner"
-        style="?android:attr/progressBarStyleLarge"
-        android:padding="150dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:elevation="10dp"
-        android:clickable="true"
-        android:alpha="0.5"
-        android:focusable="true" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnNew"
